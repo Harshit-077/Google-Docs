@@ -1,6 +1,19 @@
 "use client"
 import { cn } from "@/lib/utils";
-import { LucideIcon, Undo2Icon, Redo2Icon, PrinterIcon, SpellCheckIcon, BoldIcon } from "lucide-react";
+import { 
+    LucideIcon, 
+    Undo2Icon, 
+    Redo2Icon, 
+    PrinterIcon, 
+    SpellCheckIcon, 
+    BoldIcon, 
+    ItalicIcon,
+    UnderlineIcon,
+    MessageSquarePlusIcon,
+    ListTodoIcon,
+    RemoveFormattingIcon,
+
+     } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useEditorStore } from "@/store/use-editor-store";
 
@@ -65,7 +78,39 @@ export const Toolbar = () => {
                     icon: BoldIcon,
                     isActive: editor?.isActive("bold"),
                     onClick: () => editor?.chain().focus().toggleBold().run(),
-                }
+                },
+                {
+                    label: "Italic",
+                    icon: ItalicIcon,
+                    isActive: editor?.isActive("italic"),
+                    onClick: () => editor?.chain().focus().toggleItalic().run(),
+                },
+                {
+                    label: "Underline",
+                    icon: UnderlineIcon,
+                    isActive: editor?.isActive("underline"),
+                    onClick: () => editor?.chain().focus().toggleUnderline().run(),
+                },
+            ],
+            [
+                {
+                    label: "Comment",
+                    icon: MessageSquarePlusIcon,
+                    onClick: () => console.log("Todo: Comment"),
+                    isActive: false, //Enable this functionality later
+                },
+                {
+                    label: "List Todo",
+                    icon: ListTodoIcon,
+                    onClick: () => editor?.chain().focus().toggleTaskList().run(),
+                    isActive: editor?.isActive("taskList"),
+                },
+                {
+                    label: "Remove Formatting",
+                    icon: RemoveFormattingIcon,
+                    onClick: () => editor?.chain().focus().unsetAllMarks().run(),
+                    isActive: editor?.isActive("taskList"),
+                },
             ]
         ];
     return (
@@ -81,6 +126,17 @@ export const Toolbar = () => {
             {/* Font Size */}
             <Separator orientation="vertical" className="h-6 bg-neutral-300"/>
             {sections[1].map((item) => (
+                <ToolbarButton key={item.label} {...item}/>
+            ))}
+            {/* Text Color */}
+            {/* Highlight Color */}
+            <Separator orientation="vertical" className="h-6 bg-neutral-300"/>
+            {/* Link */}
+            {/* Image */}
+            {/* Align */}
+            {/* Line Height */}
+            {/* List */}
+            {sections[2].map((item) => (
                 <ToolbarButton key={item.label} {...item}/>
             ))}
         </div>
