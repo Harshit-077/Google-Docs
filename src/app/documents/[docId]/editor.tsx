@@ -5,6 +5,7 @@ import TaskList from '@tiptap/extension-task-list'
 import StarterKit from '@tiptap/starter-kit'
 import { Color } from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
+import TextAlign from '@tiptap/extension-text-align'
 import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import Link from '@tiptap/extension-link'
@@ -55,6 +56,9 @@ export const Editor = () => {
         extensions: [
             StarterKit,
             FontFamily,
+            TextAlign.configure({
+                types: ['heading','paragraph']
+            }),
             Color,
             Highlight.configure({
                 multicolor: true,
