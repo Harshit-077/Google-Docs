@@ -7,6 +7,7 @@ import { Color } from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
+import Link from '@tiptap/extension-link'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import Image from '@tiptap/extension-image'
@@ -61,6 +62,11 @@ export const Editor = () => {
             TextStyle,
             Underline,
             Image,
+            Link.configure({
+                openOnClick: false,
+                autolink: true,
+                defaultProtocol: 'https',
+            }),
             ImageResize,
             Table,
             TableCell,
