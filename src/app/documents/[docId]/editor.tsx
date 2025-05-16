@@ -19,6 +19,9 @@ import FontFamily from '@tiptap/extension-font-family'
 import TextStyle from '@tiptap/extension-text-style'
 import { set } from 'date-fns'
 
+import { FontSizeExtension } from '@/extensions/font-size'
+
+
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
@@ -55,6 +58,7 @@ export const Editor = () => {
         },
         extensions: [
             StarterKit,
+            FontSizeExtension,
             FontFamily,
             TextAlign.configure({
                 types: ['heading','paragraph']

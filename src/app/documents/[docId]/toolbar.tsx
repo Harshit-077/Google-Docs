@@ -23,6 +23,8 @@ import {
     ListTodoIcon,
     RemoveFormattingIcon,
     HighlighterIcon,
+    MinusIcon,
+    PlusIcon,
     Link,
     List,
 
@@ -50,6 +52,94 @@ import {
 } from "@/components/ui/dialog";
 import { set } from "date-fns";
 import { on } from "events";
+import { Value } from "@radix-ui/react-select";
+
+const FontSizeButton = () => {
+    const { editor } = useEditorStore();
+
+    const currentFontSize = editor?.getAttributes("textStyle").fontSize
+        ? editor?.getAttributes("textStyle").fontSize.replace("px", "")
+        : "16";
+
+    const [fontSize, setFontSize] = useState(currentFontSize);
+    const [inputValue, setInputValue] = useState(fontSize);
+    const [isEditing, setIsEditing] = useState(false);
+
+    const updateFontSize = (newSize: string) => {
+        const size = parseInt(newSize);
+        if (!isNaN(size) && size > 0) {
+            editor?.chain().focus().setFontSize(`${size}px`).run();
+            setFontSize(newSize);
+            setInputValue(newSize);
+            setIsEditing(false);
+        }
+    };
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value);
+    };
+
+    const handleInputBlur = () => {
+        updateFontSize(inputValue);
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            updateFontSize(inputValue);
+            editor?.commands.focus();
+        }
+    };
+
+    const increment = () => {
+        const newSize = parseInt(fontSize) + 1;
+        updateFontSize(newSize.toString());
+    }
+
+    const decrement = () => {
+        const newSize = parseInt(fontSize) - 1;
+        if (newSize > 0) {
+            updateFontSize(newSize.toString());
+        }
+    }
+
+    return (
+        <div className="flex items-center gap-x-0.5">
+            <button
+                onClick={decrement}
+                className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
+            >
+                <MinusIcon className="size-4" />
+            </button>
+            {isEditing ? (
+                <input
+                    type="text"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    onBlur={handleInputBlur}
+                    onKeyDown={handleKeyDown}
+                    className="h-7 w-10 text-sm text-center border border-neutral-400 rounded-sm bg-transparent focus: outline-none focus:ring-0"
+
+                />
+            ) : (
+                <button
+                    onClick={() => {
+                        setIsEditing(true);
+                        setFontSize(currentFontSize);
+                    }}
+                    className="h-7 w-10 text-sm text-center border border-neutral-400 rounded-sm bg-transparent cursor-text"
+                >
+                    {currentFontSize}
+                </button>
+            )}
+            <button
+                onClick={increment}
+                className="h-7 w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80"
+            >
+                <PlusIcon className="size-4" />
+            </button>
+        </div>
+    );
+};
 
 const ListButton = () => {
     const { editor } = useEditorStore();
@@ -87,8 +177,8 @@ const ListButton = () => {
                             isActive() && "bg-neutral-200/80"
                         )}
                     >
-                        <Icon className="size-4"/>
-                        <span className="text-sm">{ label }</span>
+                        <Icon className="size-4" />
+                        <span className="text-sm">{label}</span>
                     </button>
                 ))}
             </DropdownMenuContent>
@@ -137,11 +227,11 @@ const AlignButton = () => {
                         onClick={() => editor?.chain().focus().setTextAlign(value).run()}
                         className={cn(
                             "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-                            editor?.isActive({textAlign: value}) && "bg-neutral-200/80"
+                            editor?.isActive({ textAlign: value }) && "bg-neutral-200/80"
                         )}
                     >
-                        <Icon className="size-4"/>
-                        <span className="text-sm">{ label }</span>
+                        <Icon className="size-4" />
+                        <span className="text-sm">{label}</span>
                     </button>
                 ))}
             </DropdownMenuContent>
@@ -166,7 +256,7 @@ const ImageButton = () => {
 
         input.onchange = (e) => {
             const file = (e.target as HTMLInputElement).files?.[0];
-            if(file){
+            if (file) {
                 const imageUrl = URL.createObjectURL(file);
                 onChange(imageUrl);
             }
@@ -184,48 +274,48 @@ const ImageButton = () => {
 
     return (
         <>
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <button
-                    className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <button
+                        className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
                     >
-                    <ImageIcon className="size-4" />
-                </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem onClick={onUpload}>
-                    <UploadIcon className="size-4 mr-2" />
-                    Upload
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
-                    <SearchIcon className="size-4 mr-2" />
-                    Paste image URL
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                        <ImageIcon className="size-4" />
+                    </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem onClick={onUpload}>
+                        <UploadIcon className="size-4 mr-2" />
+                        Upload
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
+                        <SearchIcon className="size-4 mr-2" />
+                        Paste image URL
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Insert Image URL</DialogTitle>
-                </DialogHeader>
-                <Input 
-                placeholder="Insert Image URL"
-                value={ImageURL}
-                onChange={(e) => setImageURL(e.target.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        handleImageURLSubmit();
-                    }
-                }}
-                />
-            <DialogFooter>
-                <Button onClick={ handleImageURLSubmit }>
-                    Insert
-                </Button>
-            </DialogFooter>
-            </DialogContent> 
-        </Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Insert Image URL</DialogTitle>
+                    </DialogHeader>
+                    <Input
+                        placeholder="Insert Image URL"
+                        value={ImageURL}
+                        onChange={(e) => setImageURL(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleImageURLSubmit();
+                            }
+                        }}
+                    />
+                    <DialogFooter>
+                        <Button onClick={handleImageURLSubmit}>
+                            Insert
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
@@ -519,7 +609,7 @@ export const Toolbar = () => {
             <Separator orientation="vertical" className="h-6 bg-neutral-300" />
             <HeadingLevelButton />
             <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-            {/* Font Size */}
+            <FontSizeButton />
             <Separator orientation="vertical" className="h-6 bg-neutral-300" />
             {sections[1].map((item) => (
                 <ToolbarButton key={item.label} {...item} />
