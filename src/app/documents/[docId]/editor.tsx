@@ -20,6 +20,9 @@ import TextStyle from '@tiptap/extension-text-style'
 import { set } from 'date-fns'
 
 import { FontSizeExtension } from '@/extensions/font-size'
+import { LineHeightExtension } from '@/extensions/line-height'
+import { Line } from 'recharts'
+import { types } from 'util'
 
 
 
@@ -58,6 +61,7 @@ export const Editor = () => {
         },
         extensions: [
             StarterKit,
+            LineHeightExtension,
             FontSizeExtension,
             FontFamily,
             TextAlign.configure({
