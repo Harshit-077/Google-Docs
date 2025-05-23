@@ -30,6 +30,7 @@ import { Ruler } from './ruler'
 export const Editor = () => {
   const { setEditor } = useEditorStore();
     const editor = useEditor({
+        immediatelyRender:false,
       onCreate({editor}) {
           setEditor(editor);
       },
