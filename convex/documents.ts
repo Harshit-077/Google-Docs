@@ -40,6 +40,6 @@ export const removeById = mutation({
     if(!isOwner){
       throw new ConvexError("Unauthorized");
     }
-    await ctx.db.delete(args.id);
+    return await ctx.db.delete(args.id);
   },
 })
