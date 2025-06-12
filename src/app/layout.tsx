@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
-import { NuqsAdapter } from "nuqs/adapters/next/app"
 import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { ConvexClientProvider } from "@/components/convex-client-provider";
 
 const inter = Inter({
@@ -25,6 +26,7 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <ConvexClientProvider>
+            <Toaster />
             {children}
           </ConvexClientProvider>
         </NuqsAdapter>

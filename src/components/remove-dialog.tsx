@@ -1,9 +1,9 @@
 "use client"
-import { Id } from "../../convex/_generated/dataModel";
-import { Alert } from "./ui/alert";
+import { toast } from "sonner";
+import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { useState } from "react";
+import { Id } from "../../convex/_generated/dataModel";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -15,8 +15,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { set } from "date-fns";
-
 
 
 interface RemoveDialogProps {
@@ -50,6 +48,8 @@ export const RemoveDialog = ({documentId, children}: RemoveDialogProps) => {
                             e.stopPropagation();
                             setIsRemoving(true);
                             remove({id: documentId})
+                                .catch(()=>toast.error("Failed to delete document."))
+                                .then(() =>toast.success("Document deleted successfully."))
                                 .finally(() => setIsRemoving(false));
                         }}
                     >

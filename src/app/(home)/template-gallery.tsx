@@ -1,5 +1,12 @@
 "use client";
 
+import { toast } from "sonner";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { useMutation } from "convex/react";
+import { useRouter } from "next/navigation";
+import { templates } from "@/constants/templates";
+import { api } from "../../../convex/_generated/api";
 import {
     Carousel,
     CarouselContent,
@@ -7,28 +14,21 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
-import { templates } from "@/constants/templates";
-import { cn } from "@/lib/utils";
-import { useMutation } from "convex/react";
-import { useRouter } from "next/navigation";
-import { api } from "../../../convex/_generated/api";
-import { useState } from "react";
 
 
 export const TemplateGallery = () => {
     const router = useRouter();
     const create = useMutation(api.documents.post);
-    const [isCreating,setIsCreating] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
 
     const onTemplateClick = (title: string, initialContent: string) => {
         setIsCreating(true);
         create({ title, initialContent })
             .then((documentId) => {
                 router.push(`/documents/${documentId}`);
+                toast.success("Document created successfully.");
             })
-            .catch((error) => {
-                console.error("Error creating document:", error);
-            })
+            .catch(() => toast.error("Failed to create document."))
             .finally(() => {
                 setIsCreating(false);
             });
@@ -68,8 +68,8 @@ export const TemplateGallery = () => {
                             </CarouselItem>
                         ))}
                     </CarouselContent>
-                    <CarouselPrevious/>
-                    <CarouselNext/>
+                    <CarouselPrevious />
+                    <CarouselNext />
                 </Carousel>
             </div>
         </div>

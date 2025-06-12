@@ -1,6 +1,10 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
+import { BsFilePdf } from "react-icons/bs"
+import { DocumentInput } from "./document-input"
+import { useEditorStore } from "@/store/use-editor-store"
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs"
 import {
     Menubar,
     MenubarContent,
@@ -14,7 +18,6 @@ import {
     MenubarTrigger,
 } from "@/components/ui/menubar"
 
-import { DocumentInput } from "./document-input"
 import {
     BoldIcon,
     FileIcon,
@@ -34,8 +37,6 @@ import {
     UnderlineIcon,
     Undo2Icon
 } from "lucide-react"
-import { BsFilePdf } from "react-icons/bs"
-import { useEditorStore } from "@/store/use-editor-store"
 
 export const Navbar = () => {
     const { editor } = useEditorStore();
@@ -57,28 +58,28 @@ export const Navbar = () => {
     };
 
     const onSaveJSON = () => {
-        if(!editor) return;
+        if (!editor) return;
         const content = editor.getJSON();
-        const blob = new Blob([JSON.stringify(content)], { 
-            type: "application/json" 
+        const blob = new Blob([JSON.stringify(content)], {
+            type: "application/json"
         });
         onDownload(blob, `document.json`);//Use document name
     }
 
     const onSaveHTML = () => {
-        if(!editor) return;
+        if (!editor) return;
         const content = editor.getHTML();
-        const blob = new Blob([content], { 
-            type: "text/html" 
+        const blob = new Blob([content], {
+            type: "text/html"
         });
         onDownload(blob, `document.html`);//Use document name
     }
 
     const onSaveText = () => {
-        if(!editor) return;
+        if (!editor) return;
         const content = editor.getText();
-        const blob = new Blob([content], { 
-            type: "text/plain" 
+        const blob = new Blob([content], {
+            type: "text/plain"
         });
         onDownload(blob, `document.txt`);//Use document name
     }
@@ -219,6 +220,15 @@ export const Navbar = () => {
                         </Menubar>
                     </div>
                 </div>
+            </div>
+            <div className="flex gap-3 items-center pl-6">
+                <OrganizationSwitcher
+                    afterCreateOrganizationUrl="/"
+                    afterLeaveOrganizationUrl="/"
+                    afterSelectOrganizationUrl="/"
+                    afterSelectPersonalUrl="/" 
+                    />
+                <UserButton />
             </div>
         </nav>
     )

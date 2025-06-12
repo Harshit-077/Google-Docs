@@ -1,9 +1,11 @@
 "use client"
-import { Id } from "../../convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { toast } from "sonner";
 import { useState } from "react";
 import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { Id } from "../../convex/_generated/dataModel";
 import {
     Dialog,
     DialogContent,
@@ -13,7 +15,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "./ui/dialog";
-import { Button } from "./ui/button";
 
 
 
@@ -33,10 +34,11 @@ export const RenameDialog = ({ documentId, initialTitle, children }: RenameDialo
         e.preventDefault();
         setIsUpdating(true);
         update({ id: documentId, title: title.trim() || "Untitled" })
-            .then(() => setOpen(false))
-
+            .catch(() => toast.error("Failed to rename document."))
+            .then(() => toast.success("Document renamed successfully."))
             .finally(() => {
                 setIsUpdating(false);
+                setOpen(false);
             })
     }
     return (
