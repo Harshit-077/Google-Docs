@@ -1,10 +1,11 @@
+import { Room } from "./room";
 import { Editor } from "./editor";
 import { Navbar } from "./navbar";
 import { Toolbar } from "./toolbar";
 interface DocumentPageProps {
     params: Promise<{ docId: string }>;
 }
-const nested = async ({ params }: DocumentPageProps) => {
+const DocumentIdPage = async ({ params }: DocumentPageProps) => {
     const { docId } = await params;
     return (
         <div className="min-h-screen bg-[#fafbfd]">
@@ -13,9 +14,12 @@ const nested = async ({ params }: DocumentPageProps) => {
                 <Toolbar />
             </div>
             <div className="pt-[114px] print:pt-0">
-                <Editor />
+                <Room>
+
+                    <Editor />
+                </Room>
             </div>
         </div>
     );
 }
-export default nested;
+export default DocumentIdPage;

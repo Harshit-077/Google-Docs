@@ -150,12 +150,13 @@ const FontSizeButton = () => {
             </button>
             {isEditing ? (
                 <input
+                    title="Your input description"//Something i dont understand
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
                     onBlur={handleInputBlur}
                     onKeyDown={handleKeyDown}
-                    className="h-7 w-10 text-sm text-center border border-neutral-400 rounded-sm bg-transparent focus: outline-none focus:ring-0"
+                    className="h-7 w-10 text-sm text-center border border-neutral-400 rounded-sm bg-transparent focus:outline-none focus:ring-0"
 
                 />
             ) : (
@@ -620,8 +621,8 @@ export const Toolbar = () => {
                 {
                     label: "Comment",
                     icon: MessageSquarePlusIcon,
-                    onClick: () => console.log("Todo: Comment"),
-                    isActive: false, //Enable this functionality later
+                    onClick: () => editor?.chain().focus().addPendingComment().run(),
+                    isActive: editor?.isActive("liveblocksCommentMark"),
                 },
                 {
                     label: "List Todo",

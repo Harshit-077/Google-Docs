@@ -123,15 +123,17 @@
 }
 
 .tiptap {
+
 	/*Link styles */
 	a {
-    @apply text-blue-600;
-    cursor: pointer;
+		@apply text-blue-600;
+		cursor: pointer;
 
-    &:hover {
-      @apply underline;
-    }
-  }
+		&:hover {
+			@apply underline;
+		}
+	}
+
 	/*Image specific styling */
 	img {
 		display: block;
@@ -294,5 +296,29 @@
 		ul[data-type="taskList"] {
 			margin: 0;
 		}
+	}
+}
+
+/* For mobile */
+.floating-threads {
+	display: none;
+}
+
+/* For desktop */
+.anchored-threads {
+	display: block;
+	max-width: 300px;
+	width: 100%;
+	position: absolute;
+	right: 12px;
+}
+
+@media (max-width: 640px) {
+	.floating-threads {
+		display: block;
+	}
+
+	.anchored-threads {
+		display: none;
 	}
 }
